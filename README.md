@@ -14,14 +14,60 @@ The `ssl` module creates an Azure Key Vault, a Let's Encrypt based TLS certifica
 
 There is also a little project in the `utility` folder for generating a TLS private key to be used in creation of the certificate.
 
+## Usage
+
+You should be able to get a copy of this repository and then use the following commands to get things running:
+
+1. `terraform init`
+2. `terraform plan -var-file=some.tfvars`
+3. `terraform apply -var-file=some.tfvars`
+
+### Sample .tfvars File
+
+```terraform
+# The domain name
+domain               = "somedomain.com"
+
+# The Azure Region the resources should be created in
+location             = "North EU"
+
+# The email address to register the cert with
+registration_address = "email.address@somedomain.info"
+
+# The object id for your current user or service principal
+vault_user           = "00000000-0000-0000-0000-000000000000"
+
+# The private key to register with the Let's Encrypt CA
+pem_file_path        = "/some/path/private_key.pem"
+
+# One or more A records to create
+a_records = [
+  { name = "@", address = ["1.1.1.1"] },
+  { name = "webmail", address = ["2.2.2.2"] },
+]
+
+# One or more CNAME records to create
+cname_records = [
+  { name = "ftp", cname = "mydomain.org" },
+  { name = "www", cname = "somedomain.com" }
+]
+
+# One or more TXT records to create
+txt_records = [
+  { name = "@", value = "This does not mean anything" },
+]
+```
+
 ## Known Issues
 
+### Certificate creation times out
+If your certificate fails to create because of a timeout in the DNS challenge it is likely that you need to update your SOA records to point to the appropriate Azure DNS servers. Check with your domain registrar for details about how to do that.
+
+### Crash bug applying the entire project
 In it's current state there appears to be a bug in either Terraform or one of the providers (ACME or AzureAD) that is causing an error when the `acme_certificate` resource is processed that ends up causing a panic in the runtime. The workaround is to plan/apply the ad and dns modules first, and then the ssl module.
 
-```
-terraform apply -target module.ad -target module.dns
-terraform apply -target module.ssl
-```
+1. `terraform apply -target module.ad -target module.dns`
+2. `terraform apply -target module.ssl`
 
 ## TODO List
 
