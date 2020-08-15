@@ -1,5 +1,10 @@
 terraform {
   required_version = ">= 0.12.3"
+  backend = "azurerm" {
+    storage_account_name: "myStorageAccount"
+    container_name: "myContainer"
+    key: "someKey"
+  }
 }
 
 provider "azurerm" {
