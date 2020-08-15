@@ -1,15 +1,15 @@
 variable "domain" {
-  type        = "string"
+  type        = string
   description = "The domain to configure"
 }
 
 variable "location" {
-  type        = "string"
+  type        = string
   description = "The Azure region the resource will be created in"
 }
 
 variable "service_principal_id" {
-  type        = "string"
+  type        = string
   description = "The service principal to assign to the dns editor role"
 }
 
