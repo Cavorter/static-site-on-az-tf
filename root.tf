@@ -34,6 +34,8 @@ module "ad" {
 }
 
 module "dns" {
+  count = var.prod ? 1 : 0
+  
   source               = "./modules/dns"
   domain               = var.domain
   location             = var.location
