@@ -1,5 +1,5 @@
 #  Local .terraform directories
-**/.terraform/*
+.terraform
 
 # .tfstate files
 *.tfstate
@@ -10,3 +10,6 @@
 
 # .pem files
 **/*.pem
+
+# Visual Studio Code settings
+.vscode
